@@ -202,6 +202,10 @@ get_architecture() {
                     check_pacman_install libc++abi
                     local _ostype="ubuntu20.04"
                     ;;
+                gentoo*)
+                    check_gentoo_install libcxxabi
+                    local _ostype="ubuntu20.04"
+                    ;;
                 *)
                     err "no precompiled binaries available for OS: $_ostype"
                     ;;
@@ -319,6 +323,12 @@ check_yum_install_rpm() {
 check_pacman_install() {
     if [ "$(pacman -Q | grep $1 | wc -l)" = 0 ]; then
         run_sudo pacman -S --noconfirm $1
+    fi
+}
+
+check_gentoo_install() {
+    if [ "$(qlist -I | grep $1 | wc -l)" = 0 ]; then
+        run_sudo emerge $1
     fi
 }
 
